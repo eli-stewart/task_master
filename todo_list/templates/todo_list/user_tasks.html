@@ -1,7 +1,8 @@
 {% extends "todo_list/base.html" %}
 {% block content %}
 
-<h1 class= "mb-3"> {{view.kwargs.first_name}} {{view.kwargs.last_name}} </h1>
+<h1 class="mb-3"> Tasks for {{view.kwargs.username}} {{view.kwargs.last_name}}</h1>
+ 
  {% for task in tasks %}
 
 <article class="media content-section">
@@ -9,8 +10,7 @@
     <div class="article-metadata">
       <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner}}</a>
       <small class="text-muted">{{task.due}}</small>
-      <div align="center".
-</div>
+    
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 

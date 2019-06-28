@@ -4,16 +4,37 @@
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ object.assigner}}</a>
-      <small class="text-muted">{{object.due}}</small>
-      {% if object.assigner == user %}
-      	<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'task-update' object.id %}"> Update</a>
-      	<a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'task-delete' object.id %}"> Delete</a>
+      <a class="mr-2" href="{% url 'user-tasks' main.assigner.username %}">{{ main.assigner}}</a>
+      <small class="text-muted">{{main.due}}</small>
+      {% if main.assigner == user %}
+      	<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'task-update' main.id %}"> Update</a>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'task-subtask' main.id %}"> Assign Subtask</a>
+      	<a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'task-delete' main.id %}"> Delete</a>
       {% endif %}
     </div>
-    <h2 class="article-title"> {{object.name}}</h2>
-    <p class="article-content">{{ object.description }}</p>
+    <h2 class="article-title"> {{main.name}}</h2>
+    <p class="article-content">{{ main.description }}</p>
   </div>
 </article>
+
+{% for task in sub %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      
+      <small class="text-muted">{{task.due}}</small>
+      <div align="center".
+    <a class="btn btn-secondary btn-sm mt-0 mb-1" href ="{%url 'complete' task.id %}">Done</a>
+</div>
+    </div>
+    <h2>
+    <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
+  </h2>
+    <p class="article-content">{{ task.description }}</p>
+  </div>
+
+</article>
+{% endfor %}
+
 
 {% endblock content %}

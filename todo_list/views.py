@@ -23,7 +23,7 @@ class TaskListView(LoginRequiredMixin, ListView):
 	ordering = ['due']
 	
 	def get_queryset(self):
-		return Task.objects.filter(assignee=self.request.user).filter(status = 'TD')
+		return Task.objects.filter(assignee=self.request.user).filter(status = 'TD').filter(parent=None)
 
 class UserTaskListView(LoginRequiredMixin, ListView):
 	model = Task
@@ -33,7 +33,7 @@ class UserTaskListView(LoginRequiredMixin, ListView):
 	
 	def get_queryset(self):
 		user = get_object_or_404(User, username=self.kwargs.get('username'))
-		return Task.objects.filter(assignee=user).order_by('due')
+		return Task.objects.filter(assignee=user).filter(parent=None).order_by('due')
 
 def completeTodo(request, todo_id):
 	task = Task.objects.get(pk=todo_id)
@@ -45,6 +45,15 @@ def completeTodo(request, todo_id):
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
 	model = Task
+	context_object_name = 'tasks'
+	template_name = 'todo_list/task_detail.html'
+	queryset = Task.objects.all()
+
+	def get_context_data(self, **kwargs):
+         context = super(TaskDetailView, self).get_context_data(**kwargs)
+         context['main'] = self.get_object()
+         context['sub'] = Task.objects.filter(parent=self.get_object())
+         return context
 
 class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	model = Task
@@ -62,6 +71,13 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 	def form_valid(self, form):
 		form.instance.assigner = self.request.user
 		return super().form_valid(form)
+
+def subtaskView(request, todo_id):
+	task_parent = Task.objects.get(pk=todo_id)
+	task_child = Task(name=None, description= None, assigner=request.user, assignee=None, parent=task_parent)
+	task_child.save()
+	url = '/dashboard/task/'+ str(task_child.id) +'/update/'
+	return redirect(url)
 
 class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Task

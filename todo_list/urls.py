@@ -8,6 +8,7 @@ urlpatterns = [
     path('task/<int:pk>/', TaskDetailView.as_view(), name='task-detail'),
     path('task/new/', TaskCreateView.as_view(), name='task-create'),
     path('task/<int:pk>/update/', TaskUpdateView.as_view(), name='task-update'),
+    path('task/<todo_id>/subtask/', views.subtaskView, name='task-subtask'),
     path('task/<int:pk>/delete/', TaskDeleteView.as_view(), name='task-delete'),
     path('team/',views.team, name='todo_list-team'),
     path('complete/<todo_id>', views.completeTodo, name='complete'),
