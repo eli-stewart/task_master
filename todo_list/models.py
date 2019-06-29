@@ -26,3 +26,11 @@ class Task(models.Model):
 	def get_absolute_url(self):
 		return reverse('task-detail', kwargs={'pk': self.pk})
 
+class Team(models.Model):
+	name = models.CharField(max_length=100, null=True, blank=True)
+	leader = models.ForeignKey(User, related_name='leader', on_delete=models.CASCADE,null=True, blank=True)
+	description = models.TextField(null=True, blank=True)
+	members = models.ManyToManyField(User, related_name='memebers')
+
+	def get_absolute_url(self):
+		return reverse('team-detail', kwargs={'pk': self.pk})

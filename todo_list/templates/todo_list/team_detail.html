@@ -1,0 +1,46 @@
+{% extends "todo_list/base.html" %}
+{% block content %}
+
+<title>{{object.name}} Details</title>
+<h1>{{object.name}} Details</h1>
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{% url 'user-tasks' object.leader.username %}">{{ object.leader}}</a>
+      {% if object.leader == user %}
+      	<a class="btn btn-secondary btn-sm mt-1 mb-1" href="update/"> Update</a>
+      	<a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'team-delete' object.id %}"> Delete</a>
+      {% endif %}
+    </div>
+    <h2 class="article-title"> {{object.name}}</h2>
+    <p class="article-content">{{ object.description }}</p>
+  </div>
+</article>
+
+
+
+
+
+{% endblock content %}
+
+{% block content2 %}
+<div class="col-md-4">
+      <div class="content-section">
+       <h3>Members</h3>
+
+{% for member in object.members.all %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      
+      <small class="text-muted">{{member.username}}</small>
+    
+    <h2>
+    <a class="article-title" href="{% url 'user-tasks' member.username %}">{{member.username}}</a> 
+  </h2>
+  </div>
+</article>
+{% endfor %}
+</div>
+</div>
+{% endblock content2 %}

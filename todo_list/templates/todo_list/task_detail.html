@@ -1,6 +1,7 @@
 {% extends "todo_list/base.html" %}
 {% block content %}
-
+<title>{{main.name}} Details</title>
+<h1>{{main.name}} Details</h1>
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
@@ -16,6 +17,16 @@
     <p class="article-content">{{ main.description }}</p>
   </div>
 </article>
+
+
+
+
+{% endblock content %}
+
+{% block content2 %}
+<div class="col-md-4">
+<div class="content-section">
+<h3>Subtasks</h3>
 
 {% for task in sub %}
 <article class="media content-section">
@@ -36,5 +47,6 @@
 </article>
 {% endfor %}
 
-
-{% endblock content %}
+</div>
+</div>
+{% endblock content2 %}

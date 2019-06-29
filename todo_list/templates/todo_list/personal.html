@@ -1,5 +1,7 @@
 {% extends "todo_list/base.html" %}
 {% block content %}
+<title>My Dashboard</title>
+<h1>My Dashboard</h1>
  {% for task in tasks %}
 
 <article class="media content-section">
@@ -7,9 +9,8 @@
     <div class="article-metadata">
       <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner}}</a>
       <small class="text-muted">{{task.due}}</small>
-      <div align="center".
+      
     <a class="btn btn-secondary btn-sm mt-0 mb-1" href ="{%url 'complete' task.id %}">Done</a>
-</div>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
@@ -22,3 +23,28 @@
   
  {% endfor %}
 {% endblock content %}
+
+{% block content2 %}
+<div class="col-md-4">
+<div class="content-section">
+<h3>Completed</h3>
+
+{% for task in done %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      
+      <small class="text-muted">{{task.due}}</small>
+    </div>
+    <h2>
+    <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
+  </h2>
+    <p class="article-content">{{ task.description }}</p>
+  </div>
+
+</article>
+{% endfor %}
+
+</div>
+</div>
+{% endblock content2 %}

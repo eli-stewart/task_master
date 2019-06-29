@@ -1,4 +1,23 @@
 {% extends "todo_list/base.html" %}
 {% block content %}
- 
+<title>Team Dashboard</title>
+<h1>Team Dashboard</h1>
+
+ {% for team in teams %}
+
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{% url 'user-tasks' team.leader.username %}">{{ team.leader}}</a>
+    </div>
+    <h2>
+    <a class="article-title" href="{% url 'team-detail' team.id %}">{{team.name}}</a> 
+	</h2>
+    <p class="article-content">{{ team.description }}</p>
+  </div>
+
+</article>
+
+  
+ {% endfor %}
 {% endblock content %}

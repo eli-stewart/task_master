@@ -1,7 +1,10 @@
 {% extends "todo_list/base.html" %}
+
+
 {% block content %}
 
-<h1 class="mb-3"> Tasks for {{view.kwargs.username}} {{view.kwargs.last_name}}</h1>
+<title>Tasks for {{view.kwargs.username}}</title>
+<h1 class="mb-3"> Tasks for {{view.kwargs.username}}</h1>
  
  {% for task in tasks %}
 
@@ -10,13 +13,12 @@
     <div class="article-metadata">
       <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner}}</a>
       <small class="text-muted">{{task.due}}</small>
-    
+      
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
-	</h2>
+  </h2>
     <p class="article-content">{{ task.description }}</p>
-     <p class="article-content">{{ task.status }}</p>
   </div>
 
 </article>
@@ -24,3 +26,28 @@
   
  {% endfor %}
 {% endblock content %}
+
+{% block content2 %}
+<div class="col-md-4">
+<div class="content-section">
+<h3>Completed</h3>
+
+{% for task in done %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      
+      <small class="text-muted">{{task.due}}</small>
+    </div>
+    <h2>
+    <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
+  </h2>
+    <p class="article-content">{{ task.description }}</p>
+  </div>
+
+</article>
+{% endfor %}
+
+</div>
+</div>
+{% endblock content2 %}
