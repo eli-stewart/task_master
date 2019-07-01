@@ -11,13 +11,14 @@ class Task(models.Model):
 	name = models.CharField(max_length=100, null=True, blank=True)
 	description = models.TextField(null=True, blank=True)
 	due = models.DateTimeField(null=True, blank=True)
-	assignee = models.ForeignKey(User, related_name='Assigned_To', on_delete=models.CASCADE,null=True, blank=True)
-	assigner = models.ForeignKey(User, related_name='Assigned_By', on_delete=models.CASCADE,null=True, blank=True)
+	assignee = models.ForeignKey(User, related_name='Assigned_To', on_delete=models.CASCADE, null=True, blank=True)
+	assigner = models.ForeignKey(User, related_name='Assigned_By', on_delete=models.CASCADE, null=True, blank=True)
 	STATUSES = (
+		('P', "Pending"),
 		('TD', "To Do"),
 		('D', "Done"),
 		)
-	status = models.CharField(max_length=100, choices=STATUSES, default='TD')
+	status = models.CharField(max_length=100, choices=STATUSES, default='P')
 	parent = models.ForeignKey('Task', related_name='Parent', on_delete=models.CASCADE, null=True, blank=True)
 
 	def __str__(self):

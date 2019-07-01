@@ -3,15 +3,24 @@
 
 {% block content %}
 
-<title>Tasks for {{view.kwargs.username}}</title>
-<h1 class="mb-3"> Tasks for {{view.kwargs.username}}</h1>
+<title>Tasks for {{user.first_name}} {{user.last_name}}</title>
+<div class="media">
+   
+      <img class="rounded-circle account-img" src="{{user.profile.image.url}}">
+      <div>
+        <h1>Tasks for {{user.first_name}} {{user.last_name}}</h1>
+        <div class="article-metadata"> Email: {{user.email}}</div>
+      
+    </div>
+  </div>
+       
  
  {% for task in tasks %}
 
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner}}</a>
+      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner.first_name}} {{ task.assigner.last_name}}</a>
       <small class="text-muted">{{task.due}}</small>
       
     </div>
@@ -28,6 +37,31 @@
 {% endblock content %}
 
 {% block content2 %}
+<div class="col-md-4">
+<div class="content-section">
+<h3>Assigned</h3>
+
+{% for task in pend %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      
+      <small class="text-muted">{{task.due}}</small>
+    </div>
+    <h2>
+    <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
+  </h2>
+    <p class="article-content">{{ task.description }}</p>
+  </div>
+
+</article>
+{% endfor %}
+
+</div>
+</div>
+{% endblock content2 %}
+
+{% block content3 %}
 <div class="col-md-4">
 <div class="content-section">
 <h3>Completed</h3>
@@ -50,4 +84,4 @@
 
 </div>
 </div>
-{% endblock content2 %}
+{% endblock content3 %}

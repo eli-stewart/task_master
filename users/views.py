@@ -18,6 +18,7 @@ def register(request):
 	context = {
 		'form': form,
 		'name': 'Sign Up for Task Manager',
+		'width': '8',
 	}
 	return render(request, 'users/register.html', context)
 
@@ -40,7 +41,8 @@ def profile(request):
 	context = {
 		'u_form': u_form,
 		'p_form': p_form,
-		'name': 'Profile'
+		'name': 'Profile',
+		'width': '8',
 	}
 	return render(request, 'users/profile.html', context)
 
