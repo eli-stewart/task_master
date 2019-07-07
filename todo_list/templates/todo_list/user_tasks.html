@@ -21,7 +21,7 @@
   <div class="media-body">
     <div class="article-metadata">
       <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner.first_name}} {{ task.assigner.last_name}}</a>
-      <small class="text-muted">{{task.due}}</small>
+      <small class="text-muted">{{task.due|date:"F d, Y"}}</small>
       
     </div>
     <h2>
@@ -46,7 +46,7 @@
   <div class="media-body">
     <div class="article-metadata">
       
-      <small class="text-muted">{{task.due}}</small>
+      <small class="text-muted">{{task.due|date:"F d, Y"}}</small>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
@@ -71,7 +71,7 @@
   <div class="media-body">
     <div class="article-metadata">
       
-      <small class="text-muted">{{task.due}}</small>
+      <small class="text-muted">{{task.due|date:"F d, Y"}}</small>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 

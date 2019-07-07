@@ -10,6 +10,9 @@
  		</fieldset>
  		<div class="form-group">
  			<button class="btn btn-outline-info" type="submit">Log In</button>
+ 			<small class="text-muted">
+ 			 <a class="ml-2" href="{% url 'password_reset' %}">Forgot Password?</a>
+ 		</small>
  		</div>
  	</form>
  	<div class="border-top pt-3">
@@ -19,3 +22,12 @@
  	</div>
  </div>
 {% endblock content %}
+
+
+{% block content2 %}
+<div class="col-md-6">
+<div class="content-section">
+<img src="/media/AECS_Logo.jpg">
+</div>
+</div>
+{% endblock content2 %}
