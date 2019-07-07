@@ -7,6 +7,12 @@ import calendar
 from dateutil.relativedelta import relativedelta
 from django.core.mail import send_mail
 
+
+def get_first_name(self):
+    return (self.first_name+' '+self.last_name+' ('+self.username+')')
+
+User.add_to_class("__str__", get_first_name)
+
 def add_one_month(orig_date):
     # advance year and month by one month
     new_year = orig_date.year

@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'todo_list/main.css' %}">
 
     
-    <title>Django + Charts.js</title>
+    <title>Team Progress</title>
     {% include 'base/bootstrap_defaults.html' %}
   </head>
 
@@ -40,6 +40,7 @@
              <a class="nav-item nav-link" href ="{%url 'team-task-create' %}">Assign Team Task</a>
             <a class="nav-item nav-link" href="{% url 'task-create' %}">Assign Individual Task</a>
             <a class="nav-item nav-link" href="{% url 'team-create' %}">Create Team</a>
+             <a class="nav-item nav-link"><font color="white">|</font></a>
             <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
             <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
           {% else %}

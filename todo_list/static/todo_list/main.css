@@ -28,18 +28,6 @@ ul {
   font-weight: 500;
 }
 
-.site-header .navbar-nav2 .nav2-link {
-  color: #000000;
-}
-
-.site-header .navbar-nav2 .nav2-link:hover {
-  color: #000000;
-}
-
-.site-header .navbar-nav2 .nav2-link.active {
-  font-weight: 500;
-}
-
 .content-section {
   background: #ffffff;
   padding: 10px 20px;
