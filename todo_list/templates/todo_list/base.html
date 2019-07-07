@@ -1,8 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
-<!--{% if email %}
+{% if email %}
 <meta http-equiv="Refresh" content="0; url=/dashboard/email/">
-{% endif %} -->
+{% endif %}
 
 <html>
 <head>
@@ -38,6 +38,7 @@
              <a class="nav-item nav-link" href ="{%url 'team-task-create' %}">Assign Team Task</a>
             <a class="nav-item nav-link" href="{% url 'task-create' %}">Assign Individual Task</a>
             <a class="nav-item nav-link" href="{% url 'team-create' %}">Create Team</a>
+            <a class="nav-item nav-link"><font color="white">|</font></a>
             <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
             <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
           {% else %}

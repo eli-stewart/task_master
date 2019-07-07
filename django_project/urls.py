@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from users import views as user_views
-from todo_list.views import HomeView, get_data, ChartData
+from todo_list.views import HomeView, get_data, get_data2, ChartData
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -37,12 +37,10 @@ urlpatterns = [
     path('dashboard/', include('todo_list.urls')),
 
     url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^api/data/$', get_data, name='api-data'),
+    #url(r'^api/data/$', get_data, name='api-data'),
     #url(r'^api/data/5/$', get_data, name='api-data'),
-    #path('api/data/<team_id>/', get_data, name='api-data'),
-    url(r'^api/chart/data/$', ChartData.as_view()),
-    url(r'^admin/', admin.site.urls),
-
+    path('api/data/<team_id>/', get_data, name='api-data'),
+    path('api/data2/', get_data2, name='api-data2'),
 ]
 
 if settings.DEBUG:

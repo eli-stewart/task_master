@@ -45,7 +45,7 @@
 <script>
 {% block jquery %}
 
-var endpoint = '/api/data/'
+var endpoint = '/api/data/'+'{{object.id}}'+'/'
 var defaultData = []
 var defaultData2 =[]
 var defaultData3 =[]
@@ -157,21 +157,21 @@ var myChart3 = new Chart(ctx3, config3);
 {% block contentS %}
 
 
+<h3>Progress of {{object.name}} Tasks</h3>
 <div class='row'>
-
-  <h3>Progress Of All Tasks You Have Assigned</h3>
-    <div class='row' url-endpoint='{% url "api-data" %}'>
-        <div class='col-sm-4'>
-          <h5>Tasks Due Today</h5>
+    
+    <div class='row' url-endpoint='{% url "api-data" object.id %}'>
+        <div class='col-sm-6'>
+            <h5>Tasks Due Today</h5>
             <canvas id="myChart" width="400" height="400"></canvas>
         </div>
-        <div class='col-sm-4'>
-          <h5>Tasks Due This Week</h5>
+        <div class='col-sm-6'>
+            <h5>Tasks Due This Week</h5>
             <canvas id="myChart2" width="400" height="400"></canvas>
         </div>
 
-        <div class='col-sm-4'>
-          <h5>Tasks Due This Month</h5>
+        <div class='col-sm-6'>
+            <h5>Tasks Due This Month</h5>
             <canvas id="myChart3" width="400" height="400"></canvas>
         </div>
 
@@ -182,3 +182,4 @@ var myChart3 = new Chart(ctx3, config3);
 </div>
 
 {% endblock contentS %}
+

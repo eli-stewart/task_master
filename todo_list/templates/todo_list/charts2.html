@@ -1,33 +1,9 @@
 {% extends "todo_list/chartsbase.html" %}
-{% block content %}
-<title>Team Dashboard</title>
-<h1>Team Dashboard</h1>
-
- {% for team in teams %}
-
-<article class="media content-section">
-  <div class="media-body">
-    <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' team.leader.username %}">{{ team.leader.first_name}} {{ team.leader.last_name}}</a>
-    </div>
-    <h2>
-    <a class="article-title" href="{% url 'team-detail' team.id %}">{{team.name}}</a> 
-	</h2>
-    <p class="article-content">{{ team.description }}</p>
-  </div>
-
-</article>
-
-  
- {% endfor %}
-{% endblock content %}
-
 
 <script>
 {% block jquery %}
-var endpoint = '/api/data2/'
 
-
+var endpoint = '/api/data/'
 var defaultData = []
 var defaultData2 =[]
 var defaultData3 =[]
@@ -138,21 +114,22 @@ var myChart3 = new Chart(ctx3, config3);
 
 {% block contentS %}
 
-<h3>Progress Of All Tasks You Have Assigned</h3>
+
 <div class='row'>
-	
-    <div class='row' url-endpoint='{% url "api-data2" %}'>
-        <div class='col-sm-6'>
-        	<h5>Tasks Due Today</h5>
+
+  <h3>Progress Of All Tasks You Have Assigned</h3>
+    <div class='row' url-endpoint='{% url "api-data" %}'>
+        <div class='col-sm-4'>
+          <h5>Tasks Due Today</h5>
             <canvas id="myChart" width="400" height="400"></canvas>
         </div>
-        <div class='col-sm-6'>
-        	<h5>Tasks Due This Week</h5>
+        <div class='col-sm-4'>
+          <h5>Tasks Due This Week</h5>
             <canvas id="myChart2" width="400" height="400"></canvas>
         </div>
 
-        <div class='col-sm-6'>
-        	<h5>Tasks Due This Month</h5>
+        <div class='col-sm-4'>
+          <h5>Tasks Due This Month</h5>
             <canvas id="myChart3" width="400" height="400"></canvas>
         </div>
 
@@ -163,5 +140,3 @@ var myChart3 = new Chart(ctx3, config3);
 </div>
 
 {% endblock contentS %}
-
-

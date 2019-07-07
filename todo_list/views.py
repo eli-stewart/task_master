@@ -23,6 +23,8 @@ from django.views.generic import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from django.db.models import Q
+
 
 
 
@@ -428,11 +430,11 @@ def assignmentEmail(request, id):
 #########################################
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
-		return render(request, 'todo_list/charts.html', {"customers": 10})
+		return redirect('todo_list-personal')
 
 
 
-def get_data(request, *args, **kwargs):
+def get_data(request,team_id=None, *args, **kwargs):
 	labels = ["Done", "To Do", "Not Yet Accepted"]
 	tasks = Task.objects.all()
 	for task in tasks:
@@ -440,7 +442,48 @@ def get_data(request, *args, **kwargs):
 		task.save()
 
 	user = request.user
-	day = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='T').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='T').count(), Task.objects.filter(assigner=user).filter(status='P').filter(priority='T').count()]
+
+	myset = Team.objects.none()
+	if team_id and not (team_id == -1):
+		team = Team.objects.get(pk=team_id)
+		for member in team.members.all():
+			this = tasks.filter(assigner=user).filter(assignee=member)
+			myset = myset | this
+		day = [myset.filter(status='D').filter(priority='T').count() | myset.filter(status='D').filter(priority='L').count(), myset.filter(status='TD').filter(priority='T').count() | myset.filter(status='TD').filter(priority='L').count(), myset.filter(status='P').filter(priority='T').count()| myset.filter(status='P').filter(priority='L').count()]
+		week = [myset.filter(status='D').filter(priority='W').count(), myset.filter(status='TD').filter(priority='W').count(),  myset.filter(status='P').filter(priority='W').count()]
+		month= [myset.filter(status='D').filter(priority='D').count(), myset.filter(status='TD').filter(priority='D').count(),  myset.filter(status='P').filter(priority='D').count()]
+		
+	else:
+		day = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='T').count()| Task.objects.filter(assigner=user).filter(status='D').filter(priority='L').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='T').count()|Task.objects.filter(assigner=user).filter(status='TD').filter(priority='L').count(), Task.objects.filter(assigner=user).filter(status='P').filter(priority='T').count()| Task.objects.filter(assigner=user).filter(status='P').filter(priority='L').count()]
+		week = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='W').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='W').count(),  Task.objects.filter(assigner=user).filter(status='P').filter(priority='W').count()]
+		month= [Task.objects.filter(assigner=user).filter(status='D').filter(priority='D').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='D').count(),  Task.objects.filter(assigner=user).filter(status='P').filter(priority='D').count()]
+	backgroundColor = ['rgba(54, 162, 235, 0.8)','rgba(232, 42, 42, 0.8)', 'rgba(232, 182, 42, 0.8)']
+	backgroundColor2 = ['rgba(54, 162, 235, 0.6)','rgba(232, 42, 42, 0.6)', 'rgba(232, 182, 42, 0.6)']
+	backgroundColor3 = ['rgba(54, 162, 235, 0.4)','rgba(232, 42, 42, 0.4)', 'rgba(232, 182, 42, 0.4)']
+	data = {
+			"labels": labels,
+			"day": day,
+			"week": week,
+			"month": month,
+			"backgroundColor": backgroundColor,
+			"backgroundColor2": backgroundColor2,
+			"backgroundColor3": backgroundColor3,
+	}
+
+	
+	return JsonResponse(data) # http response
+
+
+def get_data2(request, *args, **kwargs):
+	labels = ["Done", "To Do", "Not Yet Accepted"]
+	tasks = Task.objects.all()
+	for task in tasks:
+		task.prioritize()
+		task.save()
+
+	user = request.user
+
+	day = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='T').count()| Task.objects.filter(assigner=user).filter(status='D').filter(priority='L').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='T').count()|Task.objects.filter(assigner=user).filter(status='TD').filter(priority='L').count(), Task.objects.filter(assigner=user).filter(status='P').filter(priority='T').count()| Task.objects.filter(assigner=user).filter(status='P').filter(priority='L').count()]
 	week = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='W').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='W').count(),  Task.objects.filter(assigner=user).filter(status='P').filter(priority='W').count()]
 	month= [Task.objects.filter(assigner=user).filter(status='D').filter(priority='D').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='D').count(),  Task.objects.filter(assigner=user).filter(status='P').filter(priority='D').count()]
 	backgroundColor = ['rgba(54, 162, 235, 0.8)','rgba(232, 42, 42, 0.8)', 'rgba(232, 182, 42, 0.8)']
@@ -455,6 +498,7 @@ def get_data(request, *args, **kwargs):
 			"backgroundColor2": backgroundColor2,
 			"backgroundColor3": backgroundColor3,
 	}
+
 	
 	return JsonResponse(data) # http response
 
