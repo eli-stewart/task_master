@@ -76,6 +76,32 @@ class TaskListView(LoginRequiredMixin, ListView):
 		context['email'] = Email.objects.all().exists()
 		return context
 
+class TaskListViewA(LoginRequiredMixin, ListView):
+
+	model = Task
+	template_name = 'todo_list/manage.html'
+	context_object_name = 'tasks'
+	ordering = ['due']
+
+
+	def get_context_data(self, **kwargs):
+		tasks = Task.objects.all()
+		for task in tasks:
+			task.prioritize()
+			task.save()
+
+		context = super(TaskListViewA, self).get_context_data(**kwargs)
+		todo = tasks.filter(status='TD').filter(assigner=self.request.user).filter(parent=None).order_by('due')
+		context['late'] = todo.filter(priority='L')
+		context['day'] = todo.filter(priority='T')
+		context['week'] = todo.filter(priority='W')
+		context['other'] = todo.filter(priority='D')
+		context['done'] = Task.objects.filter(status='D').filter(assigner=self.request.user).filter(parent=None).order_by('finished')[:15]
+		context['pend'] = Task.objects.filter(status='P').filter(assigner=self.request.user).order_by('due')
+		context['width'] = '4'
+		context['email'] = Email.objects.all().exists()
+		return context
+
 
 class UserTaskListView(LoginRequiredMixin, ListView):
 	model = Task
@@ -219,6 +245,7 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(TaskDetailView, self).get_context_data(**kwargs)
 		context['main'] = self.get_object()
+		print(Task.objects.filter(parent=self.get_object()).filter(status='TD').order_by('due').count())
 		context['sub'] = Task.objects.filter(parent=self.get_object()).filter(status='TD').order_by('due')
 		context['done'] = Task.objects.filter(parent=self.get_object()).filter(status='D').order_by('finished')[:15]
 		context['width'] = '4'
@@ -227,7 +254,7 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
 
 class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	model = Task
-	success_url = '/dashboard/'
+	success_url = '/dashboard/manage/'
 	def test_func(self):
 		task = self.get_object()
 		if self.request.user == task.assigner:
@@ -248,10 +275,10 @@ class TeamDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 			return True
 		return False
 
-		def get_context_data(self, **kwargs):
-			context = super(TeamDeleteView, self).get_context_data(**kwargs)
-			context['width'] = '8'
-			return context
+	def get_context_data(self, **kwargs):
+		context = super(TeamDeleteView, self).get_context_data(**kwargs)
+		context['width'] = '8'
+		return context
 
 class TaskCreateView(LoginRequiredMixin, CreateView):
 	model = Task
@@ -442,21 +469,24 @@ def get_data(request,team_id=None, *args, **kwargs):
 		task.save()
 
 	user = request.user
-
+	tasks = Task.objects.all()
 	myset = Team.objects.none()
 	if team_id and not (team_id == -1):
 		team = Team.objects.get(pk=team_id)
 		for member in team.members.all():
-			this = tasks.filter(assigner=user).filter(assignee=member)
+			this = tasks.filter(assigner=user).filter(assignee=member).filter(parent=None)
+			print(member)
+			print(this)
+			print(this.count())
 			myset = myset | this
 		day = [myset.filter(status='D').filter(priority='T').count() | myset.filter(status='D').filter(priority='L').count(), myset.filter(status='TD').filter(priority='T').count() | myset.filter(status='TD').filter(priority='L').count(), myset.filter(status='P').filter(priority='T').count()| myset.filter(status='P').filter(priority='L').count()]
 		week = [myset.filter(status='D').filter(priority='W').count(), myset.filter(status='TD').filter(priority='W').count(),  myset.filter(status='P').filter(priority='W').count()]
 		month= [myset.filter(status='D').filter(priority='D').count(), myset.filter(status='TD').filter(priority='D').count(),  myset.filter(status='P').filter(priority='D').count()]
 		
 	else:
-		day = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='T').count()| Task.objects.filter(assigner=user).filter(status='D').filter(priority='L').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='T').count()|Task.objects.filter(assigner=user).filter(status='TD').filter(priority='L').count(), Task.objects.filter(assigner=user).filter(status='P').filter(priority='T').count()| Task.objects.filter(assigner=user).filter(status='P').filter(priority='L').count()]
-		week = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='W').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='W').count(),  Task.objects.filter(assigner=user).filter(status='P').filter(priority='W').count()]
-		month= [Task.objects.filter(assigner=user).filter(status='D').filter(priority='D').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='D').count(),  Task.objects.filter(assigner=user).filter(status='P').filter(priority='D').count()]
+		day = [Task.objects.filter(parent=None).filter(assigner=user).filter(status='D').filter(priority='T').count()| Task.objects.filter(parent=None).filter(assigner=user).filter(status='D').filter(priority='L').count(), Task.objects.filter(parent=None).filter(assigner=user).filter(status='TD').filter(priority='T').count()|Task.objects.filter(parent=None).filter(assigner=user).filter(status='TD').filter(priority='L').count(), Task.objects.filter(parent=None).filter(assigner=user).filter(status='P').filter(priority='T').count()| Task.objects.filter(parent=None).filter(assigner=user).filter(status='P').filter(priority='L').count()]
+		week = [Task.objects.filter(parent=None).filter(assigner=user).filter(status='D').filter(priority='W').count(), Task.objects.filter(parent=None).filter(assigner=user).filter(status='TD').filter(priority='W').count(),  Task.objects.filter(parent=None).filter(assigner=user).filter(status='P').filter(priority='W').count()]
+		month= [Task.objects.filter(parent=None).filter(assigner=user).filter(status='D').filter(priority='D').count(), Task.objects.filter(parent=None).filter(assigner=user).filter(status='TD').filter(priority='D').count(),  Task.objects.filter(parent=None).filter(assigner=user).filter(status='P').filter(priority='D').count()]
 	backgroundColor = ['rgba(54, 162, 235, 0.8)','rgba(232, 42, 42, 0.8)', 'rgba(232, 182, 42, 0.8)']
 	backgroundColor2 = ['rgba(54, 162, 235, 0.6)','rgba(232, 42, 42, 0.6)', 'rgba(232, 182, 42, 0.6)']
 	backgroundColor3 = ['rgba(54, 162, 235, 0.4)','rgba(232, 42, 42, 0.4)', 'rgba(232, 182, 42, 0.4)']
@@ -483,9 +513,9 @@ def get_data2(request, *args, **kwargs):
 
 	user = request.user
 
-	day = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='T').count()| Task.objects.filter(assigner=user).filter(status='D').filter(priority='L').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='T').count()|Task.objects.filter(assigner=user).filter(status='TD').filter(priority='L').count(), Task.objects.filter(assigner=user).filter(status='P').filter(priority='T').count()| Task.objects.filter(assigner=user).filter(status='P').filter(priority='L').count()]
-	week = [Task.objects.filter(assigner=user).filter(status='D').filter(priority='W').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='W').count(),  Task.objects.filter(assigner=user).filter(status='P').filter(priority='W').count()]
-	month= [Task.objects.filter(assigner=user).filter(status='D').filter(priority='D').count(), Task.objects.filter(assigner=user).filter(status='TD').filter(priority='D').count(),  Task.objects.filter(assigner=user).filter(status='P').filter(priority='D').count()]
+	day = [Task.objects.filter(parent=None).filter(assigner=user).filter(status='D').filter(priority='T').count()| Task.objects.filter(parent=None).filter(assigner=user).filter(status='D').filter(priority='L').count(), Task.objects.filter(parent=None).filter(assigner=user).filter(status='TD').filter(priority='T').count()|Task.objects.filter(parent=None).filter(assigner=user).filter(status='TD').filter(priority='L').count(), Task.objects.filter(parent=None).filter(assigner=user).filter(status='P').filter(priority='T').count()| Task.objects.filter(parent=None).filter(assigner=user).filter(status='P').filter(priority='L').count()]
+	week = [Task.objects.filter(parent=None).filter(assigner=user).filter(status='D').filter(priority='W').count(), Task.objects.filter(parent=None).filter(assigner=user).filter(status='TD').filter(priority='W').count(),  Task.objects.filter(parent=None).filter(assigner=user).filter(status='P').filter(priority='W').count()]
+	month= [Task.objects.filter(parent=None).filter(assigner=user).filter(status='D').filter(priority='D').count(), Task.objects.filter(parent=None).filter(assigner=user).filter(status='TD').filter(priority='D').count(),  Task.objects.filter(parent=None).filter(assigner=user).filter(status='P').filter(priority='D').count()]
 	backgroundColor = ['rgba(54, 162, 235, 0.8)','rgba(232, 42, 42, 0.8)', 'rgba(232, 182, 42, 0.8)']
 	backgroundColor2 = ['rgba(54, 162, 235, 0.6)','rgba(232, 42, 42, 0.6)', 'rgba(232, 182, 42, 0.6)']
 	backgroundColor3 = ['rgba(54, 162, 235, 0.4)','rgba(232, 42, 42, 0.4)', 'rgba(232, 182, 42, 0.4)']

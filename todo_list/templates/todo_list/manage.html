@@ -2,18 +2,18 @@
 
 
 {% block content %}
-<title>Your Tasks</title>
-<h1>Your Tasks</h1>
+<title>Tasks You Assigned</title>
+<h1>Tasks You Assigned</h1>
 
 {% for task in late %}
 
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner.first_name}} {{ task.assigner.last_name}}</a>
+      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assignee.first_name}} {{ task.assignee.last_name}}</a>
       <small class="text-muted"><font color="red">{{task.due|date:"F d, Y"}}</font></small>
       
-    <a class="btn btn-outline-secondary btn-sm mt-0 mb-1" href ="{%url 'complete' task.id %}">Done</a>
+    <a class="btn btn-outline-danger btn-sm mt-0 mb-1" href ="{%url 'task-delete' task.id %}">Delete</a>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
@@ -33,10 +33,10 @@
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner.first_name}} {{ task.assigner.last_name}}</a>
+      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assignee.first_name}} {{ task.assignee.last_name}}</a>
       <small class="text-muted"><font color="orange">{{task.due|date:"F d, Y"}}</font></small>
       
-    <a class="btn btn-outline-secondary btn-sm mt-0 mb-1" href ="{%url 'complete' task.id %}">Done</a>
+    <a class="btn btn-outline-danger btn-sm mt-0 mb-1" href ="{%url 'task-delete' task.id %}">Delete</a>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
@@ -56,10 +56,10 @@
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner.first_name}} {{ task.assigner.last_name}}</a>
+      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assignee.first_name}} {{ task.assignee.last_name}}</a>
       <small class="text-muted"><font color="blue">{{task.due|date:"F d, Y"}}</font></small>
       
-    <a class="btn btn-outline-secondary btn-sm mt-0 mb-1" href ="{%url 'complete' task.id %}">Done</a>
+    <a class="btn btn-outline-danger btn-sm mt-0 mb-1" href ="{%url 'task-delete' task.id %}">Delete</a>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
@@ -79,10 +79,10 @@
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner.first_name}} {{ task.assigner.last_name}}</a>
+      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assignee.first_name}} {{ task.assignee.last_name}}</a>
       <small class="text-muted">{{task.due|date:"F d, Y"}}</small>
       
-    <a class="btn btn-outline-secondary btn-sm mt-0 mb-1" href ="{%url 'complete' task.id %}">Done</a>
+    <a class="btn btn-outline-danger btn-sm mt-0 mb-1" href ="{%url 'task-delete' task.id %}">Delete</a>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
@@ -106,17 +106,17 @@
 <div class="content-section">
 
 
-<h3>Assigned</h3>
+<h3>Pending Acceptance</h3>
 
 {% for task in pend %}
 
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner.first_name}} {{ task.assigner.last_name}}</a>
+      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assignee.first_name}} {{ task.assignee.last_name}}</a>
       <small class="text-muted">{{task.due|date:"F d, Y"}}</small>
       
-    <a class="btn btn-outline-secondary btn-sm mt-0 mb-1" href ="{%url 'accept' task.id %}">Accept</a>
+    <a class="btn btn-outline-danger btn-sm mt-0 mb-1" href ="{%url 'task-delete' task.id %}">Delete</a>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}"> {{task.name}}</a> 
@@ -150,9 +150,9 @@
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assigner.first_name}} {{ task.assigner.last_name}}</a>
+      <a class="mr-2" href="{% url 'user-tasks' task.assigner.username %}">{{ task.assignee.first_name}} {{ task.assignee.last_name}}</a>
       <small class="text-muted">{{task.due|date:"F d, Y"}}</small>
-      <a class="btn btn-outline-secondary btn-sm mt-0 mb-1" href ="{%url 'todo' task.id %}">Not Done</a>
+<a class="btn btn-outline-danger btn-sm mt-0 mb-1" href ="{%url 'task-delete' task.id %}">Delete</a>
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 

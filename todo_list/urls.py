@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import ChartData, HomeView, TeamTaskCreateView, TeamDeleteView, TeamUpdateView, TeamCreateView, TeamDetailView, TeamListView, TaskDeleteView, TaskUpdateView, TaskListView, UserTaskListView, TaskDetailView, TaskCreateView
+from .views import TaskListViewA, ChartData, HomeView, TeamTaskCreateView, TeamDeleteView, TeamUpdateView, TeamCreateView, TeamDetailView, TeamListView, TaskDeleteView, TaskUpdateView, TaskListView, UserTaskListView, TaskDetailView, TaskCreateView
 from . import views
 
 urlpatterns = [
     path('', TaskListView.as_view(), name='todo_list-personal'),
+    path('manage/', TaskListViewA.as_view(), name='todo_list-manage'),
     path('user/<str:username>/', UserTaskListView.as_view(), name='user-tasks'),
     path('task/<int:pk>/', TaskDetailView.as_view(), name='task-detail'),
     path('team/<int:pk>/', TeamDetailView.as_view(), name='team-detail'),

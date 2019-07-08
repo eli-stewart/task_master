@@ -26,6 +26,9 @@
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
+    {% if task.subtasks %}
+  <small class="text-muted"> (Has Subtasks) </small>
+   {% endif %}
   </h2>
     <p class="article-content">{{ task.description }}</p>
   </div>
@@ -50,6 +53,12 @@
     </div>
     <h2>
     <a class="article-title" href="{% url 'task-detail' task.id %}">{{task.name}}</a> 
+    {% if task.parent %}
+      <small class="text-muted"> (Subtask of {{ task.parent.name }}) </small>
+      {% endif %}
+      {% if task.subtasks %}
+      <small class="text-muted"> (Has Subtasks) </small>
+      {% endif %}
   </h2>
     <p class="article-content">{{ task.description }}</p>
   </div>

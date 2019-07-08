@@ -160,5 +160,6 @@ class Task(models.Model):
 		return reverse('assign-email', kwargs={'id': self.id})
 		#return reverse('task-detail', kwargs={'pk': self.pk})
 
-
+	def __str__(self):
+		return str(self.name)
 
