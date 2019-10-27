@@ -1,7 +1,7 @@
-from django.shortcuts import render
 
 
-from django.urls import reverse
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -24,6 +24,10 @@ from django.db.models import Q
 
 from .models import Entry, Category
 from django.db.models import Max
+
+from django.conf import settings
+from django.conf.urls import url,include
+from django.conf.urls.static import static
 
 # Create your views here.
 class EntryListView(ListView):
@@ -78,7 +82,19 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
 	def form_valid(self, form):
 		form.instance.creator = self.request.user
 		return super().form_valid(form)
-		
+
+def updater(request, cat_id):
+	category = Category.objects.all().get(pk=cat_id)
+	categoryEntries = Entry.objects.all().filter(category=category).order_by("-value")
+
+	for i,e in enumerate(categoryEntries):
+		e.rank = i+1
+		e.save()
+
+	return redirect('category-detail', category.id)
+
+
+
 class UserEntries(LoginRequiredMixin, ListView):
 	model = Entry
 	template_name = 'asend/user_entries.html'
