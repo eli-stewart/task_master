@@ -34,6 +34,7 @@ TIME_ZONE = 'India/Madurai'
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'todo_list.apps.TodoListConfig',#added app
+    'asend.apps.AsendConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -131,7 +132,7 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'todo_list-personal'
+LOGIN_REDIRECT_URL = 'homepage'
 LOGIN_URL = 'login'
 
 

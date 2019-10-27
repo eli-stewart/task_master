@@ -1,4 +1,4 @@
-{% extends "todo_list/base.html" %}
+{% extends "asend/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 <title>Login</title>
@@ -9,7 +9,7 @@
  			{{ form|crispy }}
  		</fieldset>
  		<div class="form-group">
- 			<button class="btn btn-outline-info" type="submit">Log In</button>
+ 			<button class="btn btn-outline-info" href="{% url 'homepage' %} type="submit">Log In</button>
  			<small class="text-muted">
  			 <a class="ml-2" href="{% url 'password_reset' %}">Forgot Password?</a>
  		</small>
